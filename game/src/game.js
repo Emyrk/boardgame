@@ -6,6 +6,8 @@
  * https://opensource.org/licenses/MIT.
  */
 
+import { LoveTriangle } from "./maps";
+
 function IsVictory(cells) {
   const positions = [
     [0, 1, 2],
@@ -30,14 +32,19 @@ export const TicTacToe = {
   name: "tic-tac-toe",
 
   setup: () => ({
-    cells: Array(9).fill(null)
+    cells: Array(9).fill(null),
+    board: LoveTriangle,
   }),
 
   moves: {
     clickCell(G, ctx, id) {
-      if (G.cells[id] === null) {
-        G.cells[id] = ctx.currentPlayer;
-      }
+      // Our click
+      G.board.cellMap[id].color = "blue"
+
+      // TicTacToe Click
+      // if (G.cells[id] === null) {
+        // G.cells[id] = ctx.currentPlayer;
+      // }
     }
   },
 

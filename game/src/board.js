@@ -9,6 +9,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './board.css';
+import { Canvas } from "./canvas";
 
 export class TicTacToeBoard extends React.Component {
   static propTypes = {
@@ -33,6 +34,8 @@ export class TicTacToeBoard extends React.Component {
   }
 
   render() {
+    console.log(this.props.ctx.currentPlayer)
+
     let tbody = [];
     for (let i = 0; i < 3; i++) {
       let cells = [];
@@ -63,6 +66,7 @@ export class TicTacToeBoard extends React.Component {
 
     return (
       <div>
+        <Canvas {...this.props} />
         <table id="board">
           <tbody>{tbody}</tbody>
         </table>
