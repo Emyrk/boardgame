@@ -39,7 +39,8 @@ export const TicTacToe = {
   moves: {
     clickCell(G, ctx, id) {
       // Our click
-      G.board.cellMap[id].color = "blue"
+
+      G.board.cellMap[id].primary = ctx.playerID
 
       // TicTacToe Click
       // if (G.cells[id] === null) {

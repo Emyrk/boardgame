@@ -91,13 +91,29 @@ export class Canvas extends React.Component {
         let board= this.props.G.board
         let props = this.props
 
+
+        // Draw all arrows first to put them on the bottom layer
         for(let i = 0; i < board.cells.length; i++) {
         	let cell = board.cells[i]
-        	p.drawCircle(cell.x, cell.y, cell.size, cell.color)
+			// Draw arrows
         	for(let j = 0; j < cell.to.length; j++) {
         		let to = board.cellMap[cell.to[j]]
         		p.drawArrow(cell.x, cell.y, to.x, to.y)
         	}
+        }
+
+        for(let i = 0; i < board.cells.length; i++) {
+        	let cell = board.cells[i]
+        	// Draw outer circle
+        	p.drawCircle(cell.x, cell.y, cell.size, cell.color)
+
+        	// Draw the player if they are on the primary
+        	if(cell.primary != null) {
+        		let c = playerColor(cell.primary)
+        		p.drawCircle(cell.x, cell.y, cell.size/2, c)
+        	}
+
+        	// Put the ID
         	p.fill('black')
         	p.textSize(20)
         	p.text(cell.id, cell.x-5, cell.y+2)
@@ -131,4 +147,16 @@ export class Canvas extends React.Component {
       </div>
     )
   }
+}
+
+
+
+function playerColor(playerID) {
+  switch (playerID){
+    case "0":
+      return "blue";
+    case "1":
+      return "green"
+  }
+  return "black"
 }
