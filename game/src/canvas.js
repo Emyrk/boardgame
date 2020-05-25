@@ -15,10 +15,12 @@ export class Canvas extends React.Component {
   constructor(props) {
     super(props)
 	this.myRef = React.createRef()
+	this.listeners = [];
   }
 
   Sketch = (p) => {
   	p.setup = () => {
+  		console.log(`Canvas draw for ${this.props.playerID}`)
         let cnv = p.createCanvas(400, 400);
         console.log("PID" + this.props.playerID)
 
@@ -31,32 +33,55 @@ export class Canvas extends React.Component {
         	cnv.position(0, 0)
         }
 
-  		console.log(cnv)
-        // p.noLoop()
+        let board= this.props.G.board
+        // Draw buttons once
+        for(let i = 0; i < board.cells.length; i++) {
+        	let cell = board.cells[i]
+        	let cellButton = p.cellButton(cell)
+        }
+
+        // drop a player id
+        p.fill('black')
+        p.textSize(10)
+        p.text("Pid: " + this.props.playerID, 10, 10)
+
+        cnv.mouseMoved = p.mouseMoved
+        cnv.mousePressed = p.mousePressed
     };
 
+
+
+    p.mouseMoved = () => {
+    	for(let i = 0; i < this.listeners.length; i++) {
+    		let l = this.listeners[i]
+    		let d = p.dist(p.mouseX, p.mouseY, l.x, l.y)
+    		if(d < l.size) {
+    			p.cursor('grab');
+    			return 
+    		}
+    	}
+    }
+
+    p.mousePressed = () => {
+    	for(let i = 0; i < this.listeners.length; i++) {
+    		let l = this.listeners[i]
+    		let d = p.dist(p.mouseX, p.mouseY, l.x, l.y)
+    		if(d < l.size) {
+    			let props = this.props
+    			console.log(`Player ${props.playerID} hit button ${l.id}`)
+        		props.moves.clickCell(l.id);
+    			return 
+    		}
+    	}
+    }
+
+    // Add a mousebutton listener for each cell
     p.cellButton = (cell) => {
-    	let button = p.createButton("" + cell.id)
-    	button.style("text-align", "center")
-    	button.style("font-size", "20px")
-    	button.style("border", "none")
-    	button.style("cursor", "pointer")
-    	button.style("border-radius", "100%")
-    	button.style("width", cell.size+"px")
-    	button.style("height", cell.size+"px")
-    	button.style("background", "transparent")
-    	button.style("text-shadow", "0px 1px 4px #FFFFFF")
-    	// Idk why these magic numbers
-    	// TODO: Figure this out
-    	button.position(cell.x+p.X, cell.y)
-    	//     	button.position(cell.x-(cell.size/3.14), cell.y)
-
-
-    	return button
+    	this.listeners.push(cell)
+    	return null
     }
 
     p.draw = () => {
-        console.log(`Canvas draw for ${this.props.playerID}`)
         p.background('grey');
         // p.fill(255);
         // p.rect(25,25,50,50);
@@ -73,22 +98,10 @@ export class Canvas extends React.Component {
         		let to = board.cellMap[cell.to[j]]
         		p.drawArrow(cell.x, cell.y, to.x, to.y)
         	}
+        	p.fill('black')
+        	p.textSize(20)
+        	p.text(cell.id, cell.x-5, cell.y+2)
         }
-
-        for(let i = 0; i < board.cells.length; i++) {
-        	let cell = board.cells[i]
-        	let cellButton = p.cellButton(cell)
-        	cellButton.mousePressed(function() {
-        		console.log(`Player ${props.playerID} hit button ${cell.id}`)
-        		props.moves.clickCell(cell.id);
-        	})
-        }
-
-        // drop a player id
-        p.fill('black')
-        p.textSize(10)
-        p.text("Pid: " + this.props.playerID, 10, 10)
-
     };
 
     p.drawCircle = (x, y, size, color) => {
