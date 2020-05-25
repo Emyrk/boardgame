@@ -11,13 +11,13 @@ import { render } from "react-dom";
 import { Client } from "boardgame.io/react";
 import { Local } from "boardgame.io/multiplayer";
 import { TicTacToe } from "./game";
-import { TicTacToeBoard } from "./board";
+import { UnmatchedBoard } from "./board";
 import { Canvas } from "./canvas";
 import { SocketIO } from 'boardgame.io/multiplayer';
 
 const TicTacToeClient = Client({
   game: TicTacToe,
-  board: TicTacToeBoard,
+  board: UnmatchedBoard,
   multiplayer: Local(),
   // multiplayer: SocketIO({ server: 'localhost:8000' }),
   // debug: false

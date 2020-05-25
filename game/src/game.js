@@ -40,7 +40,9 @@ export const TicTacToe = {
     clickCell(G, ctx, id) {
       // Our click
 
-      G.board.cellMap[id].primary = ctx.playerID
+      if(G.board.cellMap[id].primary === null) {
+        G.board.cellMap[id].primary = ctx.playerID
+      }
 
       // TicTacToe Click
       // if (G.cells[id] === null) {

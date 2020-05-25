@@ -69,6 +69,7 @@ export class Canvas extends React.Component {
     		if(d < l.size) {
     			let props = this.props
     			console.log(`Player ${props.playerID} hit button ${l.id}`)
+    			
         		props.moves.clickCell(l.id);
     			return 
     		}
